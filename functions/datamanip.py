@@ -557,7 +557,103 @@ def count_nan(df):
 ###############################################################################
 ###############################################################################
 
+# librairie
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 
+import sys
+
+
+def show_irrad_sarah(data_geo,STANDARD_NAME, ncfile ,url , min_long,max_long,min_lat,max_lat):
+    """
+    Show the irradiance data on a map with netCDF file
+
+    Args:
+        data_geo (pandas.core.frame.DataFrame) : dataframe which contains all geographical data of stations
+        STANDARD_NAME (str) : name of irradiance data
+        ncfile (netCDF4._netCDF4.Dataset) : dataset in format netCFD4
+        url (str) : netCDF file path
+        min_long (int) : minimum value of longitude for the figure
+        max_long (int) : maximum value of longitude for the figure
+        min_lat (int) : minimum value of latitude for the figure
+        max_lat (int) : maximum value of latitude for the figure
+        
+    Returns:
+        None
+
+    Example :
+        data_geo = pd.read_csv('data_geo_all_station.csv', sep=';', index_col=0)
+        STANDARD_NAME = "surface_direct_along_beam_shortwave_flux_in_air"
+        ncfile = nc.Dataset(url_file_2020_01)
+        url = "C:/.../data_sarah3/DNImm202001010000004UD1000101UD.nc"
+        min_long = 20
+        max_long = 65
+        min_lat = -35
+        max_lat = 0
+    """
+    # Searching for variable by standard name
+    varname = next((name for name, var in ncfile.variables.items() if hasattr(var, 'standard_name') and var.standard_name == STANDARD_NAME), None)
+    
+    if not varname:
+        print(f"Error: Unable to find variable with standard name '{STANDARD_NAME}' in file: {url}")
+        ncfile.close()
+        sys.exit(1)
+    
+    # Extracting parameters
+    latitude = ncfile.variables['lat'][:]
+    longitude = ncfile.variables['lon'][:]
+    
+    # Extracting time
+    time_unix = ncfile.variables['time'][:]
+    var_array = np.array(ncfile.variables[varname][:])
+    var_array = var_array.astype(np.float32) # conversion  dtype=int16 to dtype=float32
+    var_array[var_array == -999] = np.nan
+    
+    # Converting time to human-readable format
+    time_array = np.array([datetime.fromtimestamp(t) for t in time_unix])
+
+    mask_long = (longitude >= min_long) & (longitude <= max_long)
+    mask_lat = (latitude >= min_lat) & (latitude <= max_lat)
+    # Apply the mask to the longitude and latitude to solar flux data
+    new_longitude = longitude[mask_long]
+    new_latitude = latitude[mask_lat]
+
+    # Apply the mask in irradiance data
+    masked_var_array = var_array[:, mask_lat, :][:, :, mask_long]
+
+
+    # Creat a map
+    plt.figure(figsize=(12, 8))
+    ax = plt.axes(projection=ccrs.PlateCarree())
+
+    # Draw data in map
+    plt.contourf(new_longitude, new_latitude, masked_var_array[0], transform=ccrs.PlateCarree(),cmap='YlOrRd')
+    
+    # Add map details
+    ax.coastlines()
+    ax.add_feature(cfeature.BORDERS.with_scale('50m'), linewidth=0.5, edgecolor='gray')
+    ax.add_feature(cfeature.COASTLINE.with_scale('50m'), linewidth=0.2, edgecolor='gray')
+    ax.gridlines(draw_labels=True)
+
+    # Add color bar
+    plt.colorbar(label=f'{ncfile.variable_id} [W/$m^2$]')
+    
+    # Add a title
+    plt.title(f'{ncfile.title}')
+
+    
+    # Add station meteo
+    for i in range(data_geo.shape[0]):
+        if min_long<data_geo.iloc[i,1]<max_long :
+            if min_lat<data_geo.iloc[i,0]<max_lat:
+                plt.scatter(data_geo.iloc[i,1], data_geo.iloc[i,0], color='blue', label=f'Station of {data_geo.index[i]}',s=30,marker='^')
+    plt.legend(bbox_to_anchor=(1.25, 1.0), loc="upper left",fontsize=7)
+
+
+    # Show map
+    plt.show()
+    print("Horizontale axis : Longitude \nVertical axis : Latitude")
+    return
 
 
 
