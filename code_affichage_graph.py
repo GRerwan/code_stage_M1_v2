@@ -22,7 +22,7 @@ from pandas.plotting import register_matplotlib_converters
 
 
 
-
+'''
 #-------------------------------------------------------
 #      Import data  
 #-------------------------------------------------------
@@ -40,5 +40,37 @@ df_filter = datamanip.quality_of_bsrn(df_estim_dni) # useful data
 #-------------------------------------------------------
 
 datamanip.affiche_courbe_dhi_dni_ghi('plaineparnational', df_filter)
+'''
 
+
+
+
+
+def affiche_courbe(name,df):
+    """
+    Plot the irradiance curves (DHI and GHI) for a given station.
+
+    Args:
+        name (str): Name of the station.
+        df (DataFrame): DataFrame containing irradiance valuable data.
+        
+    Returns:
+        None
+    """
+    # Convert the index to datetime
+    df.index = pd.to_datetime(df.index)
+    # Create the figure
+
+    df.plot(figsize=(10, 8),linewidth=0.5)
+    plt.xlabel('Time [UTC+4]')
+    plt.ylabel('Irradiance [$W/m^2$]')
+    plt.title(f'GHI and DHI in {name}')
+    plt.legend(loc='best')
+    
+    
+    # Show the plot
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+    return
 
