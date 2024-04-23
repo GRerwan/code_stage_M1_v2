@@ -674,7 +674,7 @@ def show_irrad_sarah_pixel(maps,data_geo,STANDARD_NAME, ncfile ,url , min_long,m
         None
 
     Example :
-        map = ccrs.PlateCarree()
+        maps = ccrs.PlateCarree()
         data_geo = pd.read_csv('data_geo_all_station.csv', sep=';', index_col=0)
         STANDARD_NAME = "surface_direct_along_beam_shortwave_flux_in_air"
         url = "C:/.../data_sarah3/DNImm202001010000004UD1000101UD.nc"
@@ -747,5 +747,53 @@ def show_irrad_sarah_pixel(maps,data_geo,STANDARD_NAME, ncfile ,url , min_long,m
     print("Horizontale axis : Longitude \nVertical axis : Latitude")
     return
 
+
+# adaptation of geographical data
+
+
+def data_geo_adaption(data_geo, url):
+    """
+    Adaption geographical data in-situe to SARAH-3 data
+
+    Args:
+        data_geo (dataframe) : dataframe which contains all geographical data of stations
+        url (str) : netCDF file path
+        
+    Returns:
+        data_geo_modif (dataframe) : dataframe which contains all geographical data of stations adapted
+
+    Example :
+        data_geo = pd.read_csv('data_geo_all_station.csv', sep=';', index_col=0)
+        url = "C:/.../data_sarah3/DNImm202001010000004UD1000101UD.nc"
+    """
+    ncfile = nc.Dataset(url) #dataset in format netCFD4
+    
+    # Extracting parameters
+    latitude = ncfile.variables['lat'][:]
+    longitude = ncfile.variables['lon'][:]
+    
+    def approched_latitude(nombre):
+        liste = latitude.data.tolist()
+        l = len(liste)
+        L = []
+        for i in range(l):
+            L.append(abs(liste[i]-nombre))
+        a = L.index(min(L))
+        return round(liste[a],4)
+
+    def approched_longitude(nombre):
+        liste = longitude.data.tolist()
+        l = len(liste)
+        L = []
+        for i in range(l):
+            L.append(abs(liste[i]-nombre))
+        a = L.index(min(L))
+        return round(liste[a],4)
+
+    # Adaption of datafreame
+    data_geo_modif = data_geo.copy()
+    data_geo_modif['Latitude_modif'] = data_geo_modif['Latitude'].apply(approched_latitude)
+    data_geo_modif['Longitude_modif'] = data_geo_modif['Longitude'].apply(approched_longitude)
+    return data_geo_modif
 
 
