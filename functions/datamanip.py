@@ -546,6 +546,50 @@ def count_nan(df):
 
 
 
+def dni_data(df, data_geo):
+    '''
+    Return a dataframe with DNI data
+
+    Args :
+        df (dataFrame) : pandas DataFrame without dni
+        data_geo (dataFrame) : pandas Dataframe with gegraphical data
+        
+    Returns :
+        df (dataFrame) : pandas DataFrame with dni
+
+    Example : 
+        df = pd.read_csv('data_brute/reunion/plaineparcnational_irrad.csv', sep=';', index_col=0)
+        data_geo = pd.read_csv('data_geo_all_station.csv', sep=';', index_col=0)
+    '''
+    df_one_columns = one_column_ghi_dhi(df)
+    data_dni = estimation_dni(df_one_columns, data_geo, 'plaineparcnational', 'Indian/Reunion')
+    filter_data = quality_of_bsrn(data_dni)
+    # Delete unnecessary column
+    filter_data.drop(columns=['zenith',	'extra_radiation',	'mu0'], inplace=True)
+    return filter_data
+
+
+def save_useful_data(df,data_geo,depart,station):
+    """
+    sava useful in compiteur
+
+    Args:
+        df (DataFrame): DataFrame containing irradiance data (GHI, DHI and DNI).
+        df_geo (DataFrame): DataFrame containing geographic data (Longitude, Latitude and Altitude).
+        depart (str): Name of the departement.
+        station (str): Name of station.
+        
+    Returns:
+        df_1 (DataFrame): DataFrame containing irradiance data (dhi ,dni, ghi, mu0, extra_radiation and zenith).
+    """
+    data = dni_data(df, data_geo)
+    data.to_csv(f'data_utile/{depart}/{station}_useful.csv', sep=';', index=True)
+    print('The backup was completed successfully')
+    return 
+
+
+
+
 ###############################################################################
 ###############################################################################
 ###############################################################################
