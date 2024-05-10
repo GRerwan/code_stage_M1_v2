@@ -548,7 +548,7 @@ def count_nan(df):
 #==============================================================================
 # Creat columns with DNI estimate
 #==============================================================================
-def dni_data(df, data_geo):
+def dni_data(df, data_geo,name):
     '''
     Return a dataframe with DNI data
 
@@ -564,7 +564,7 @@ def dni_data(df, data_geo):
         data_geo = pd.read_csv('data_geo_all_station.csv', sep=';', index_col=0)
     '''
     df_one_columns = one_column_ghi_dhi(df)
-    data_dni = estimation_dni(df_one_columns, data_geo, 'plaineparcnational', 'Indian/Reunion')
+    data_dni = estimation_dni(df_one_columns, data_geo, name, 'Indian/Reunion')
     filter_data = quality_of_bsrn(data_dni)
     # Delete unnecessary column
     filter_data.drop(columns=['zenith',	'extra_radiation',	'mu0'], inplace=True)
@@ -584,7 +584,7 @@ def save_useful_data(df,data_geo,depart,station):
     Returns:
         df_1 (DataFrame): DataFrame containing irradiance data (dhi ,dni, ghi, mu0, extra_radiation and zenith).
     """
-    data = dni_data(df, data_geo)
+    data = dni_data(df, data_geo,station)
     data.to_csv(f'data_utile/{depart}/{station}_useful.csv', sep=';', index=True)
     print('The backup was completed successfully')
     return 
@@ -1033,7 +1033,7 @@ def compar_data(liste_of_data, stations_names, start , end, function_mean, varia
     L = len(liste_of_data)
     df = pd.DataFrame()
     for i in range(L):
-        print(f'{i}/{L}') # turn indicator 
+        print(f'{i+1}/{L}') # turn indicator 
         mean_data = liste_of_data[i].apply(function_mean) # this row permit to apply the mean on the data
         select_data = mean_data[start:end] # this row permit to select the time zone useful
         df[stations_names[i]+f'_{variable.upper()}_in_situe'] = select_data[variable] # this row permit to upload each data stations in new dataframe
@@ -1164,4 +1164,241 @@ def show_irrad_all_stations_Heatmap_2_data(df_sarah, df_in_situe):
     fig.show()
 
     return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
+#______________ Import daily mean SARAH-3 data ______________________________________________
+#
+###############################################################################
+###############################################################################
+###############################################################################
+###############################################################################
+
+
+
+# Libraries 
+import glob
+import os
+import seaborn as sns
+import time
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import pvlib
+from pvlib.location import Location
+from pandas.plotting import register_matplotlib_converters
+import plotly.graph_objects as go
+import xarray as xr
+import netCDF4 as nc
+import sys
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+from datetime import datetime
+import warnings
+import plotly.express as px
+from plotly.subplots import make_subplots
+
+
+
+sns.set(style="darkgrid", palette="bright",context = "talk",font="fantasy" )
+
+# Désactiver l'affichage des FutureWarnings temporairement
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
+
+
+
+
+def hourly_mean(df):
+    df.index = pd.to_datetime(df.index)
+    data = df.copy()
+    # Group data by hour and calculate the mean
+    df_hourly_mean = data.resample('H').mean()
+    return df_hourly_mean
+
+
+def regroup_sarah_data_mounthly_mean(liste_of_file_path,data_geo):
+    """
+    Save the pixel value on dataframe with SARAH-3 data at netCDF files
+
+    Args:
+        liste_of_file_path (lst) : liste of path data
+        data_geo (dataFrame) : dataframe which contains all geographical data of stations
+
+    Returns:
+        data_geo (dataFrame) : dataframe which contains all geographical data of stations
+
+    Example :
+        liste_of_file_path = ["data_sarah3/2020/DNImm202001010000004UD1000101UD.nc",....,"data_sarah3/2020/DNImm202012010000004UD1000101UD.nc",]
+        data_geo = pd.read_csv('data_geo_adaptation.csv', sep=';', index_col=0)
+    """
+
+    # make a copy to be able to manipulate the dataframe without modifying the original
+    data_modif = data_geo.copy()
+    index_data_geo = data_geo.index.tolist()
+    df = pd.DataFrame(columns=index_data_geo)
+    for j in range(len(liste_of_file_path)):
+        url = liste_of_file_path[j]
+        ncfile = nc.Dataset(url)
+        STANDARD_NAME = "surface_direct_along_beam_shortwave_flux_in_air" #DNI
+        # Searching for variable by standard name
+        varname = next((name for name, var in ncfile.variables.items() if hasattr(var, 'standard_name') and var.standard_name == STANDARD_NAME), None)
+        if not varname:
+            print(f"Error: Unable to find variable with standard name '{STANDARD_NAME}' in file: {url}")
+            ncfile.close()
+            sys.exit(1)
+        # Extracting parameters
+        latitude = ncfile.variables['lat'][:]
+        longitude = ncfile.variables['lon'][:]
+        
+        # Extracting time
+        time_unix = ncfile.variables['time'][:]
+        var_array = np.array(ncfile.variables[varname][:])
+        
+        # Converting time to human-readable format
+        time_array = np.array([datetime.fromtimestamp(t) for t in time_unix])
+        dni_value_sarah = var_array[0]
+        dni_liste = []
+        liste_latitude = list(latitude.data)
+        liste_longitude = list(longitude.data)
+        for i in range(data_modif.shape[0]):
+            float64_number_1 = data_modif['Latitude_modif'][i]
+            float32_number_1 = float64_number_1.astype(np.float32)
+            float64_number_2 = data_modif['Longitude_modif'][i]
+            float32_number_2 = float64_number_2.astype(np.float32)
+            indice_lat = liste_latitude.index(float32_number_1)
+            indice_long = liste_longitude.index(float32_number_2)
+            val = dni_value_sarah[indice_lat][indice_long]
+            dni_liste.append(val)
+        dni_value = dni_liste
+        index = pd.to_datetime(ncfile.time_coverage_start)
+        df.loc[index] = dni_value
+    # Renommer toutes les colonnes
+    new_column_names = [col + '_DNI_SARAH_3' for col in df.columns]
+    # Renommer les colonnes
+    df.rename(columns=dict(zip(df.columns, new_column_names)), inplace=True)
+    df.name = 'DNI_SARAH_3'
+    return df
+
+def calculer_temps_execution(fonction, *args, **kwargs):
+    debut = time.time()
+    resultat = fonction(*args, **kwargs)
+    fin = time.time()
+    temps_execution = fin - debut
+    print(f"Temps d'exécution de {fonction.__name__}: {temps_execution} secondes")
+    return resultat
+
+
+def regroup_sarah_data_daily_mean_par_station(liste_of_file_path,data_geo,name_station):
+    """
+    Save the pixel value on dataframe with SARAH-3 data at csv files
+
+    Args:
+        liste_of_file_path (lst) : liste of path data containt all netCDF files
+        data_geo (dataFrame) : dataframe which contains all geographical data of stations
+
+    Returns:
+        df (dataFrame) : dataframe which contains all SARAH-3 data for one station
+
+    Example :
+        liste_of_file_path = ["data_sarah3/2020/DNImm202001010000004UD1000101UD.nc",....,"data_sarah3/2020/DNImm202012010000004UD1000101UD.nc",]
+        data_geo = pd.read_csv('data_geo_adaptation.csv', sep=';', index_col=0)
+        name_station = 'amitie'
+    """
+
+    # make a copy to be able to manipulate the dataframe without modifying the original
+    data_modif = data_geo.copy()
+    index_data_geo = data_geo.index.tolist()
+    df = pd.DataFrame(columns=[name_station])
+    number_index = index_data_geo.index(name_station)
+    for j in range(len(liste_of_file_path)):
+        url = liste_of_file_path[j]
+        ncfile = nc.Dataset(url)
+        STANDARD_NAME = "surface_direct_along_beam_shortwave_flux_in_air" #DNI
+        # Searching for variable by standard name
+        varname = next((name for name, var in ncfile.variables.items() if hasattr(var, 'standard_name') and var.standard_name == STANDARD_NAME), None)
+        if not varname:
+            print(f"Error: Unable to find variable with standard name '{STANDARD_NAME}' in file: {url}")
+            ncfile.close()
+            sys.exit(1)
+        # Extracting parameters
+        latitude = ncfile.variables['lat'][:]
+        longitude = ncfile.variables['lon'][:]
+        
+        # Extracting time
+        time_unix = ncfile.variables['time'][:]
+        var_array = np.array(ncfile.variables[varname][:])
+        
+        # Converting time to human-readable format
+        time_array = np.array([datetime.fromtimestamp(t) for t in time_unix])
+        dni_value_sarah = var_array[0]
+        dni_liste = []
+        liste_latitude = list(latitude.data)
+        liste_longitude = list(longitude.data)
+    
+        float64_number_1 = data_modif['Latitude_modif'][number_index]
+        float32_number_1 = float64_number_1.astype(np.float32)
+        float64_number_2 = data_modif['Longitude_modif'][number_index]
+        float32_number_2 = float64_number_2.astype(np.float32)
+        #indice_lat = liste_latitude.index(round(float(float32_number_1),3))
+        #indice_long = liste_longitude.index(round(float(float32_number_2),3))
+
+        indice_lat = liste_latitude.index(float32_number_1)
+        indice_long = liste_longitude.index(float32_number_2)
+    
+    
+        
+        #indice_lat = liste_latitude.index(float32_number_1)
+        #indice_long = liste_longitude.index(float32_number_2)
+        val = dni_value_sarah[indice_lat][indice_long]
+        dni_liste.append(val)
+        dni_value = dni_liste
+        
+        index = pd.to_datetime(ncfile.time_coverage_start)
+        df.loc[index] = dni_value
+        ncfile.close()
+    # Renommer toutes les colonnes
+    new_column_names = [col + '_DNI_SARAH_3' for col in df.columns]
+    # Renommer les colonnes
+    df.rename(columns=dict(zip(df.columns, new_column_names)), inplace=True)
+    #df.name = name_station
+    # Remplacer -999 par np.nan dans tout le DataFrame
+    df.replace(-999, np.nan, inplace=True)
+    df = round(df)
+    df.to_csv(f'data_sarah3/DNI/daily/dataframe/{name_station}.csv', sep=';', index=True)
+    return df
+
 
