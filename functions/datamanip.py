@@ -39,19 +39,17 @@ from bs4 import BeautifulSoup
 
 def liste_of_link(url):
     """
-    Create a list which contains sub-lists corresponding
-    to the different islands and in each sub-list there 
-    is a list for each station on the island
+    Import all netCDF files by IOS-NET website
 
     Args:
-        url (str): lien of IOS-NET website.
+        url (str): url containing all links
         
     Returns:
-        L (list) : list which contains sub-lists corresponding
-        to the different islands and in each sub-list there 
-        is a list for each station on the island
-    """
+        L (lst): list containing list of links per stations
 
+    Example:
+        url = "https://galilee.univ-reunion.fr/thredds/catalog/dataStations/catalog.html"
+    """
     # Début du compteur de temps
     start_time = time.time()
     L=[]
@@ -108,10 +106,12 @@ def liste_of_link(url):
                     nc_links = soup_2.find_all('a', href=lambda href: href and href.endswith('.nc'))
                     # Extraire les noms des fichiers .nc
                     nc_files = [nc_link.text.strip() for nc_link in nc_links]
+                    '''
                     # Afficher les noms des fichiers .nc
                     print("Fichiers .nc disponibles :")
                     for nc_file in nc_files:
                         print(nc_file)
+                    '''
                 else:
                     print("Erreur lors de la requête HTTP :", response_2.status_code)
                 
