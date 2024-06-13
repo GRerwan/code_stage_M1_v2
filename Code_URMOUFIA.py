@@ -36,7 +36,6 @@ sns.set(style="darkgrid", palette="bright",context = "paper",font="Arial" )
 def hourly_mean(df):
     data = df.copy()
     data.index = pd.to_datetime(data.index)
-    
     # Filtrer les heures UTC entre 02h et 14h (inclus)
     df_filtered = data.between_time('02:00', '14:00')
     # Group data by hour and calculate the mean
@@ -46,33 +45,23 @@ def hourly_mean(df):
 def daily_mean(df):
     data = df.copy()
     data.index = pd.to_datetime(data.index)
-    
     # Filtrer les heures entre 01h et 15h (inclus)
     df_filtered = data.between_time('02:00', '14:00')
     # Group data by hour and calculate the mean
     df_daily_mean = df_filtered.resample('D').mean()
     return df_daily_mean
-
-
 #############################################################################################################
 def monthly_mean(df):
     data = df.copy()
     data.index = pd.to_datetime(data.index)
-    # Group data by hour and calculate the mean
     df_mounthly_mean = data.resample('M').mean()
     return df_mounthly_mean
-
-
 #############################################################################################################
 def yearly_mean(df):
     data = df.copy()
     data.index = pd.to_datetime(data.index)
-    # Group data by hour and calculate the mean
     df_yearly_mean = data.resample('Y').mean()
     return df_yearly_mean
-
-
-
 #############################################################################################################
 # Fonction de tri personnalisée ( permet de mettre les GHI en premier dans la liste )
 def custom_sort(item):
