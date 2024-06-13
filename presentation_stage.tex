@@ -1,0 +1,257 @@
+\documentclass{beamer}
+
+% Utilisation du thème Darmstadt
+\usetheme{Darmstadt}
+
+% Packages nécessaires pour la couleur
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+% Définition des couleurs personnalisées pour les sections
+\definecolor{mysectioncolor}{RGB}{255, 255, 255} % Couleur pour la section courante
+\definecolor{myothersectionscolor}{RGB}{255, 255, 255} % Couleur pour les autres sections BLANC
+
+\definecolor{blanc}{RGB}{255, 255, 255}
+\definecolor{bleuNRJLAB}{RGB}{20,67,100}
+\definecolor{bleuNRJLABfonce}{RGB}{20,67,100}
+\definecolor{orangeNRJLAB}{RGB}{245,155,27}
+
+
+\usecolortheme[named=bleuNRJLAB]{structure}
+% Configuration du pied de page pour afficher le numéro de page à droite
+%\setbeamertemplate{footline}[frame number]
+
+% Configuration du pied de page
+\setbeamertemplate{footline}{
+	\begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,leftskip=1em,rightskip=1em]{author in head/foot}
+		\usebeamerfont{author in head/foot}\insertshortauthor\hfill\insertshortinstitute\hfill\insertframenumber{}/\inserttotalframenumber
+	\end{beamercolorbox}
+}
+
+\newenvironment{blockorange}[1]{%
+	\setbeamercolor{block title example}{bg=orangeNRJLAB,fg=white}%
+	\setbeamercolor{block body example}{bg=orangeNRJLAB!10,fg=black}%
+	\begin{exampleblock}{#1}}{\end{exampleblock}}
+
+\newenvironment{blockbleu}[1]{%
+	\setbeamercolor{block title example}{bg=bleuNRJLAB,fg=white}%
+	\setbeamercolor{block body example}{bg=bleuNRJLAB!10,fg=black}%
+	\begin{exampleblock}{#1}}{\end{exampleblock}}
+
+\setbeamercolor{itemize item}{fg=black}
+
+
+% Définir les marges de gauche et de droite
+\setbeamersize{text margin left=0.5cm, text margin right=0.5cm}
+
+% Modifier la taille de la police pour le headline
+\setbeamerfont{subsection in head/foot}{size=\normalsize }
+
+
+% Informations sur le document
+\title{Inter-comparaison et validation entre les messures in situe et les estimations satellite de l'irradiance solaire incident dans la zone du Sud Ouest de l'Océan Indien}
+\author{GRONDIN Erwan}
+\institute{Universié de La Réunion}
+\date{\today}
+
+\begin{document}
+	
+
+	
+\begin{frame}
+\titlepage
+
+\centering
+\includegraphics[width=0.5\linewidth]{C:/Users/erwan/Desktop/UNIVERSITE/LOGO/energy_labb}
+\includegraphics[width=0.5\linewidth]{C:/Users/erwan/Desktop/UNIVERSITE/LOGO/energy_labb}
+
+\thispagestyle{empty} % Pour ne pas afficher l'en-tête sur cette page
+\end{frame}
+
+\begin{frame}
+	\frametitle{Sommaire}
+	\tableofcontents[]
+	\thispagestyle{empty}
+\end{frame}
+
+\section{Introduction}
+\begin{frame}
+	\frametitle{Introduction}
+	
+\end{frame}
+
+\section{Données}
+\subsection{Données de l'étude}
+\begin{frame}
+	\frametitle{Données}
+	\begin{minipage}[t]{0.48\textwidth}
+		\begin{itemize}
+			\item Irradiance Horizontale Globale (GHI) en $W/m^2$.
+			\item Irradiance Normale Directe (DNI) en $W/m^2$ .
+		\end{itemize}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{0.48\textwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.7\linewidth]{img/lien_entre_ghi_dni_dhi}
+		\end{figure}
+	\end{minipage}
+	\vfill
+	\begin{minipage}[t]{0.48\textwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.7\linewidth]{img/four_solaire}
+			\caption{Système à concentration solaire (DNI)}
+			\label{fig:foursolaire}
+		\end{figure}
+		
+	\end{minipage}
+	\hfill
+	\begin{minipage}[t]{0.48\textwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[width=0.7\linewidth]{img/panneau_solaire}
+			\caption{Panneau solaire (GHI)}
+			\label{fig:Panneausolaire}
+		\end{figure}
+	\end{minipage}
+\end{frame}
+
+
+\subsection{Les mesures in situ IOS-net}
+\begin{frame}
+	
+	% Première moitié de la page en hauteur, et toute la largeur de la frame
+	\begin{minipage}[t][0.2\textheight][t]{\textwidth}
+		\begin{blockorange}{Appareils de mesures}
+			\small
+			\begin{itemize}
+				\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+				\item \textbf{SPN1 / CMP22} : Pour les données de GHI et DHI
+				\item \textbf{CHP1} : Pour les données de DNI (BSRN)
+			\end{itemize}
+		\end{blockorange}
+	\end{minipage}
+	
+	\vfill
+	
+	% Deuxième moitié de la page, divisée en deux colonnes
+	\begin{minipage}[c][0.8\textheight][c]{0.45\textwidth}
+		\begin{blockbleu}{\'Equipement des stations}
+			\small
+			\begin{itemize}
+				\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+				\item Pyranomètre SPN1
+				\item Transmetteur météorologique WXT530
+				\item Radiomètre UV
+				\item Centrale d’acquisition
+				\item \'Eolienne
+				\item Panneau photovoltaïque
+				\item Régulateur de charge
+				\item Batterie de plomb 20 AH
+			\end{itemize}
+		\end{blockbleu}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c][0.8\textheight][c]{0.45\textwidth}
+		\includegraphics[trim=3cm 0cm 3cm 1cm, clip, width=1\linewidth]{img/SWIO_station}
+	\end{minipage}
+	
+\end{frame}
+
+
+
+\subsection{Les estimations SARAH-3}
+
+
+
+\begin{frame}
+	\begin{minipage}[c][\textheight][c]{0.45\textwidth}
+		\includegraphics[width=1.2\linewidth]{img/exemple_cm_saf_1}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c][\textheight][c]{0.45\textwidth}
+		\begin{blockorange}{Caractéristiques des données SARAH-3}
+			\small
+			\begin{itemize}
+				\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+				\item\textbf{Spatial grid } : ±65° de longitude / ±65° de latitude
+				\item \textbf{Spatial precision } : 0,05° x 0,05°
+				\item \textbf{Temporal grid} : 01/01/1983 to 01/04/2024
+				\item \textbf{Product} : CAL, DAL, DNI, PAR , SDU, SID and SIS
+			\end{itemize}
+		\end{blockorange}
+	\end{minipage}
+\end{frame}
+
+
+
+\section{Méthodologie}
+\subsection{Importation des donnée IOS-net}
+\begin{frame}
+	%\frametitle{Données}
+	Contenu des travaux connexes.
+\end{frame}
+\subsection{Estimation du DNI (IOS-net)}
+\begin{frame}
+	%\frametitle{Données}
+	Contenu des travaux connexes.
+\end{frame}
+
+
+\subsection{Contrôle de qualité}
+\begin{frame}
+	%\frametitle{Données}
+	Contenu des travaux connexes.
+\end{frame}
+\subsection{Moyenne temporelle}
+\begin{frame}
+	%\frametitle{Données}
+	Contenu des travaux connexes.
+\end{frame}
+\subsection{Importation des données SARAH-3}
+\begin{frame}
+	%\frametitle{Données}
+	Contenu des travaux connexes.
+\end{frame}
+\subsection{Comparaison des méthodes de moyennes}
+\begin{frame}
+	%\frametitle{Données}
+	Contenu des travaux connexes.
+\end{frame}
+\subsection{Adaptation de données géographique}
+\begin{frame}
+	%\frametitle{Données}
+	Contenu des travaux connexes.
+\end{frame}
+\subsection{Importation des donnée IOS-net}
+\begin{frame}
+	\frametitle{Méthodologie}
+	Contenu de la méthodologie.
+\end{frame}
+
+\section{Résultats}
+\subsection{Comparaison DNI}
+\begin{frame}
+	%\frametitle{Données}
+	Contenu des travaux connexes.
+\end{frame}
+\subsection{Comparaison GHI}
+\begin{frame}
+	%\frametitle{Données}
+	Contenu des travaux connexes.
+\end{frame}
+\subsection{Indicateur de précision}
+\begin{frame}
+	\frametitle{Résultats}
+	Contenu des résultats.
+\end{frame}
+
+\section{Conclusion et Discussion}
+\begin{frame}
+	\frametitle{Conclusion et Discussion}
+	Contenu de la conclusion.
+\end{frame}
+	
+\end{document}
