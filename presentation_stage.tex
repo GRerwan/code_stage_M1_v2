@@ -32,6 +32,8 @@
 \usepackage{hyperref}
 \usepackage{cleveref}
 
+\usepackage{appendixnumberbeamer}
+
 
 % Définition des couleurs personnalisées pour les sections
 \definecolor{mysectioncolor}{RGB}{255, 255, 255} % Couleur pour la section courante
@@ -46,6 +48,7 @@
 \usecolortheme[named=bleuNRJLAB]{structure}
 % Configuration du pied de page pour afficher le numéro de page à droite
 %\setbeamertemplate{footline}[frame number]
+
 
 % Configuration du pied de page
 \setbeamertemplate{footline}{
@@ -73,12 +76,19 @@
 % Modifier la taille de la police pour le headline
 %\setbeamerfont{subsection in head/foot}{size=\small }
 
+\usepackage[scaled]{helvet} % Charge la police Helvetica
+\renewcommand{\familydefault}{\sfdefault} % Définit la police par défaut comme étant sans-serif (Helvetica)
+
+
+% Définir une nouvelle commande pour les puces en noir et de taille spécifiée
+\setbeamertemplate{itemize item}{\raisebox{-0.31em}{\textcolor{black}{\huge\textbullet}}}
+
 
 % Informations sur le document
-\title{Inter-comparaison et validation entre les messures in situe et les estimations satellite de l'irradiance solaire incident dans la zone du Sud Ouest de l'Océan Indien}
+\title{\textbf{\textsf{Inter-comparaison entre les données d'observation du réseau IOS-net et les estimations satellitaires de SARAH-3}}}
 \author{GRONDIN Erwan}
-\institute{Universié de La Réunion}
-\titlegraphic{\includegraphics[width=0.4\textheight]{img/logo_UFRST}\quad\quad\quad\includegraphics[width=0.4\textheight]{img/energy_labb}}
+\institute{Université de La Réunion}
+\titlegraphic{\includegraphics[width=0.4\textheight]{img/logo_UFRST}\quad\quad\quad \includegraphics[width=0.4\textheight]{img/logo_osu_r}\quad\quad\quad\includegraphics[width=0.4\textheight]{img/energy_labb}}
 \date{\today}
 
 \begin{document}
@@ -86,8 +96,8 @@
 
 	
 \begin{frame}
-\textbf{STAGE M1}: 2 mois\\
-\textbf{Encadrants} : Dr.Béatrice MOREL et Dr.Dominique GRONDIN
+\textbf{STAGE M1}: 2 mois effectués / 2 mois restants\\
+\textbf{Encadrants} : Dr.MOREL Béatrice et Dr.GRONDIN Dominique
 \titlepage
 \thispagestyle{empty} % Pour ne pas afficher l'en-tête sur cette page
 \end{frame}
@@ -101,179 +111,129 @@
 \section{Introduction}
 \begin{frame}
 	\frametitle{Introduction}
-	\includegraphics[width=0.7\linewidth]{img/logo_osu_r}
-	\includegraphics[width=0.7\linewidth]{img/logo_osu_r1}
-\end{frame}
-
-\section{Données}
-\subsection{Données de l'étude}
-\begin{frame}
-	\frametitle{Données}
-	\begin{minipage}[t]{0.48\textwidth}
-		\begin{itemize}
-			\item Irradiance Horizontale Globale (GHI) en $W/m^2$.
-			\item Irradiance Normale Directe (DNI) en $W/m^2$ .
-		\end{itemize}
-	\end{minipage}
-	\hfill
-	\begin{minipage}[t]{0.48\textwidth}
-		\begin{figure}
-			\centering
-			\includegraphics[width=0.7\linewidth]{img/lien_entre_ghi_dni_dhi}
-		\end{figure}
+	\begin{minipage}[t][0.4\textheight][t]{\textwidth}
+		\begin{minipage}[t][\textheight][t]{0.48\textwidth}
+			\begin{blockorange}{Contexte sur la Ressource Solaire (\textbf{SSR})}
+				\begin{itemize}
+					\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+					\item Ressource \textbf{abondante}
+					\item Effet sur la variabilité \textbf{climatique}, \textbf{atmosphérique} et \textbf{hydrologique}.
+					\item Permet de diversifier le mixe énergétique des \textbf{îles tropicales} et de diminuer les gaz à effet de serre (\textbf{GES}).
+				\end{itemize}
+			\end{blockorange}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[t][\textheight][t]{0.48\textwidth}
+			\begin{blockorange}{\'Etat de l'art}
+				\begin{itemize}
+					\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+					\item \textbf{2023} : Christella IGIHOZO travaille sur l'inter-comparaison des données de SARAH-3 sur 14 stations du réseau IOS-net.
+				\end{itemize}
+			\end{blockorange}
+		\end{minipage}
 	\end{minipage}
 	\vfill
-	\begin{minipage}[t]{0.48\textwidth}
-		\begin{figure}
-			\centering
-			\includegraphics[width=0.7\linewidth]{img/four_solaire}
-			\caption{Système à concentration solaire (DNI)}
-			\label{fig:foursolaire}
-		\end{figure}
-		
-	\end{minipage}
-	\hfill
-	\begin{minipage}[t]{0.48\textwidth}
-		\begin{figure}
-			\centering
-			\includegraphics[width=0.7\linewidth]{img/panneau_solaire}
-			\caption{Panneau solaire (GHI)}
-			\label{fig:Panneausolaire}
-		\end{figure}
-	\end{minipage}
-\end{frame}
-
-
-\subsection{Les mesures in situ IOS-net}
-\begin{frame}
-	
-	% Première moitié de la page en hauteur, et toute la largeur de la frame
-	\begin{minipage}[t][0.2\textheight][t]{\textwidth}
-		\begin{blockorange}{Appareils de mesures}
-			\small
+	\begin{minipage}[t][0.58\textheight][t]{\textwidth}
+		\begin{blockbleu}{Liens avec le Projet SoCooMa}
 			\begin{itemize}
 				\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
-				\item \textbf{SPN1 / CMP22} : Pour les données de GHI et DHI
-				\item \textbf{CHP1} : Pour les données de DNI (BSRN)
-			\end{itemize}
-		\end{blockorange}
-	\end{minipage}
-	
-	\vfill
-	
-	% Deuxième moitié de la page, divisée en deux colonnes
-	\begin{minipage}[c][0.8\textheight][c]{0.45\textwidth}
-		\begin{blockbleu}{\'Equipement des stations}
-			\small
-			\begin{itemize}
-				\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
-				\item Pyranomètre SPN1
-				\item Transmetteur météorologique WXT530
-				\item Radiomètre UV
-				\item Centrale d’acquisition
-				\item \'Eolienne
-				\item Panneau photovoltaïque
-				\item Régulateur de charge
-				\item Batterie de plomb 20 AH
+				\item \textbf{SoCooMa} : Concentration solaire pour cuisiner à Mafate (\textit{Solar Concentration for Cooking in Mafate})
+				\item \textbf{Objectif} :  Estimation fine du rayonnement solaire en relief accidenté.
+				\item \textbf{Tache} : inter-comparaison des estimations satellitaires et des mesures aux deux nouvelles stations de Mafate ainsi qu’aux stations PIMENT nouvellement intégrées dans le réseau IOS-net.
 			\end{itemize}
 		\end{blockbleu}
 	\end{minipage}
-	\hfill
-	\begin{minipage}[c][0.8\textheight][c]{0.45\textwidth}
-		\includegraphics[trim=3cm 0cm 3cm 1cm, clip, width=1\linewidth]{img/SWIO_station}
-	\end{minipage}
-	
 \end{frame}
 
-
-
-\subsection{Les estimations SARAH-3}
-
+\section{Données}
 
 
 \begin{frame}
-	\begin{minipage}[c][\textheight][c]{0.45\textwidth}
-		\includegraphics[width=1.2\linewidth]{img/exemple_cm_saf_1}
-	\end{minipage}
-	\hfill
-	\begin{minipage}[c][\textheight][c]{0.45\textwidth}
-		\begin{blockorange}{Caractéristiques des données SARAH-3}
-			%\small
-			%\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
-			\textbullet \ \textbf{Spatial grid } : ±65° de longitude / ±65° de latitude\\
-			\textbullet \ \textbf{Spatial precision } : 0,05° x 0,05°\\
-			\textbullet \ \textbf{Temporal grid} : 01/01/1983 to 01/04/2024\\
-			\textbullet \ \textbf{Product} : CAL, DAL, DNI, PAR , SDU, SID and SIS
-		\end{blockorange}
-	\end{minipage}
+	\frametitle{Jeu de données}
+	\begin{columns}[T] % [T] ensures correct vertical alignment
+		\begin{column}{0.48\linewidth} % Left column
+			\centering
+			\begin{blockbleu}{Caractéristiques des données IOS-net}
+				\begin{itemize}
+					\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+					\item \textbf{Stations} : 39 stations
+					\item \textbf{Temporal grid} : 01/12/2008 - 01/04/2024
+					\item \textbf{Product} : GHI, DHI, DNI, TA, PA, WD,WS
+				\end{itemize}
+			\end{blockbleu}
+			\includegraphics[width=\linewidth]{img/SWIO_station}
+		\end{column}
+		\begin{column}{0.48\linewidth} % Right column
+			\centering
+			\begin{blockorange}{Caractéristiques des données SARAH-3}
+				\begin{itemize}
+					\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+					\item \textbf{Spatial grid } : ±65° de longitude / ±65° de latitude
+					\item \textbf{Spatial precision } : 0,05° x 0,05°
+					\item \textbf{Temporal grid} : 01/01/1983 - 01/04/2024
+					\item \textbf{Product} : CAL, DAL, DNI, PAR , SDU, SID and SIS
+				\end{itemize}
+			\end{blockorange}
+			\includegraphics[width=0.8\linewidth]{img/exemple_cm_saf_1}
+		\end{column}
+	\end{columns}
 \end{frame}
-
 
 
 \section{Méthodologie}
 \subsection{IOS-net data}
 \begin{frame}
-	\frametitle{Importation des donnée IOS-net}
-	\begin{minipage}[c][\textheight][t]{0.35\textwidth}
-		\begin{blockorange}{Code python}
-			\textbullet \ Récupérer tous les liens \textbf{netCDF} avec requêtes \textit{HTTP} et \textit{BeautifulSoup}
-			
-			\textbullet \ Sauvegarder les liens une \textbf{liste} structurée
-			
-			\textbullet \ Conversion de tous les fichiers netCDF en \textbf{Dataframe} avec \textit{xarray}.
-			
-			\textbullet \ \textbf{Sélection} des données utiles (GHI,DHI,DNI et timestamp)
-
-		\end{blockorange}
-	\end{minipage}
-	\hfill
-	\begin{minipage}[c][\textheight][t]{0.6\textwidth}
-		\begin{minipage}[t][0.3\textheight][t]{\textwidth}
-			\includegraphics[width=\linewidth]{img/ios_net_TDS}
-		\end{minipage}
-		\vfill
-		\begin{minipage}[t][0.69\textheight][t]{\textwidth}
+	\frametitle{Importation des données}
+	\begin{columns}[T] % [T] ensures correct vertical alignment
+		\begin{column}{0.3\linewidth} % Left column
+			\begin{blockorange}{Code python}
+				\begin{itemize}
+					\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+					\item Récupérer tous les liens \textbf{netCDF} avec requêtes \textit{HTTP} et \textit{BeautifulSoup}
+					\item Sauvegarder les liens dans  une \textbf{liste} structurée
+					\item Conversion de tous les fichiers netCDF en \textbf{Dataframe} avec \textit{xarray}.
+					\item \textbf{Sélection} des données utiles (GHI,DHI,DNI et timestamp)
+				\end{itemize}
+			\end{blockorange}
+		\end{column}
+		\begin{column}{0.68\linewidth} % Center column
+			\includegraphics[width=\linewidth]{img/ios_net_TDS}\\
 			\includegraphics[width=\linewidth]{img/all_name_var}
-		\end{minipage}
-	\end{minipage}
+		\end{column}
+	\end{columns}
 \end{frame}
+
+
+
 
 
 \begin{frame}
 	\frametitle{Estimation du DNI}
-	\begin{minipage}[c][0.4\textheight][t]{0.55\textwidth}
-		\begin{blockbleu}{\'Estimation du DNI ($W/m^2$)}
-			\begin{equation}
-				DNI = \frac{1}{\mu_0}(GHI - DHI)
-			\end{equation}
-			
-			Avec $\mu_0$ le cosinus du l'angle zenithale
-			
-		\end{blockbleu}
-	\end{minipage}
-	\hfill
-	\begin{minipage}[c][0.4\textheight][t]{0.35\textwidth}
-		\begin{blockorange}{Considération de Pvlib}
-			\textbullet \ Latitude
-			
-			\textbullet \ Longitude
-			
-			\textbullet \ Altitude
-			
-			\textbullet \ Time Zone
-			
-			\textbullet \ Timestamp
-			
-		\end{blockorange}
-	\end{minipage}
-	
-	\begin{figure}
-		\centering
-		\includegraphics[width=1\linewidth]{img/df_aure_example}
-		\caption{Estimation du DNI pour la stations "aurere" à La Réunion}
-		\label{fig:dfaureexample}
-	\end{figure}
-	
+	\begin{columns}[T] % [T] ensures correct vertical alignment
+		\begin{column}{0.47\linewidth} % Left column
+			\begin{blockbleu}{\'Estimation du DNI ($W/m^2$)}
+				\begin{equation}
+					DNI = \frac{1}{\mu_0}(GHI - DHI)
+				\end{equation}
+				
+				Avec $\mu_0$ le cosinus du l'angle zenithale
+				
+			\end{blockbleu}
+			\begin{blockorange}{Considération de Pvlib}
+				\begin{itemize}
+					\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+					\item Latitude
+					\item Longitude
+					\item Altitude
+					\item Time Zone
+					\item Timestamp
+				\end{itemize}
+			\end{blockorange}
+		\end{column}
+		\begin{column}{0.47\linewidth} % Center column
+			\includegraphics[width=\linewidth]{img/comparison_XY_of_CHP1_dni_ground_BSRN}
+		\end{column}
+	\end{columns}
 \end{frame}
 
 
@@ -298,7 +258,7 @@
 		\begin{column}{0.3\linewidth} % Center column
 			\includegraphics[width=\linewidth]{img/flow_data/dhi/amitie}\\[1pt]
 			\begin{center}
-				\textbf{QC1- DHI-($W/m^2$)}
+				\textbf{QC2- DHI-($W/m^2$)}
 			\end{center}
 			\begin{equation}
 				S_a \times 0.95 \times \mu_0^{1.2} + 50
@@ -307,7 +267,7 @@
 		\begin{column}{0.3\linewidth} % Right column
 			\includegraphics[width=\linewidth]{img/flow_data/dni/amitie}\\[1pt]
 			\begin{center}
-				\textbf{QC1- DNI-($W/m^2$)}
+				\textbf{QC3- DNI-($W/m^2$)}
 			\end{center}
 			\begin{equation}
 				S_a
@@ -373,37 +333,18 @@
 	\begin{minipage}[c][\textheight][t]{0.48\textwidth}
 		\centering
 		\includegraphics[width=0.8\textwidth]{img/sarah_show/SISdm20240101}\\
-		\textbf{CM-SAF SARAH-3 representation of DNI at SOOI area }\\
+		\textbf{CM-SAF SARAH-3 representation of GHI at SOOI area }\\
 		\includegraphics[width=0.8\textwidth]{img/sarah_show/DNIdm20240101}\\
 		\textbf{CM-SAF SARAH-3 representation of DNI at SOOI area }
 	\end{minipage}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Comparaison des méthodes de moyennes}
-	\begin{figure}[t!]
-		\centering
-		\includegraphics[width=\linewidth]{img/comparison_mean_method}
-		\caption{Comparison between mean used by CM-SAF and mean method used by this study (urmoufia).}
-		\label{fig_diffente_mean_method}
-	\end{figure}
-	\begin{minipage}[c][0.48\textheight][t]{\textwidth}
-		\begin{blockbleu}{Mean comparison}
-			\textbullet \  pandas mean : \texttt{resample('D').mean()} \\
-			\textbullet  \ CM-SAF mean :
-			\begin{equation}
-				SIS_{DA} = SIS_{CLSDA} \frac{\sum\limits_{i=1}^{n}SIS_i}{\sum\limits_{i=1}^{n}SIS_{CLS_i}}
-				\label{SIS_average}
-			\end{equation}
-			Avec $SIS_{DA}$ la moyenne journalière du SIS,  $SIS_{CLSDA}$ la moyenne journalière du SIS en ciel clair, $SIS_i$ valeur instantanée du SIS par les images satellites et $SIS_{CLS_i}$ est le SIS calculé correspondant au ciel clair.
-		\end{blockbleu}
-	\end{minipage}
-\end{frame}
+
 
 \subsection{Comparaison des données}
 
 \begin{frame}
-	\frametitle{\'Etapes pour la comparaison}
+	\frametitle{\'Etapes pour la comparaison entre les données IOS-net et SARAH-3}
 	\begin{columns}[b] % [T] ensures correct vertical alignment
 		\begin{column}{0.33\linewidth} % Left column
 			\centering
@@ -449,28 +390,6 @@
 
 \section{Résultats}
 \subsection{Comparaison DNI}
-
-\begin{frame}
-	\frametitle{DNI in situ comparée au DNI estimé}
-	\begin{figure}[c]
-		\centering
-		\begin{minipage}[b]{0.49\textwidth}
-			\centering
-			\includegraphics[width=\linewidth]{img/comparison_curve_of_CHP1_dni_ground_BSRN.png}
-			\caption{\centering Comparaison moyenne de DNI au sol (CHP1) avec DNI estimé (CMP22) aux stations BSRN à la Réunion.}
-			\label{comparison_curve_of_CHP1_dni_ground_BSRN}
-		\end{minipage}\hfill
-		\begin{minipage}[b]{0.49\textwidth}
-			\centering
-			\includegraphics[width=\linewidth]{img/comparison_XY_of_CHP1_dni_ground_BSRN.png}
-			\caption{\centering Nuage de points de DNI au sol (CHP1) avec  DNI estimé (CMP22) aux stations BSRN à la Réunion.}
-			\label{comparison_XY_of_CHP1_dni_ground_BSRN}
-		\end{minipage}
-	\end{figure}
-\end{frame}
-
-
-
 \begin{frame}
 	\frametitle{Résultats du site du BSRN}
 	\begin{columns}[T] % [T] ensures correct vertical alignment
@@ -503,19 +422,15 @@
 
 \subsection{Indicateur de précision}
 \begin{frame}
-	\frametitle{Résultats pour toutes les stations (daily/monthly/yearly)}
+	\frametitle{Résultats pour toutes les stations (daily mean)}
 	\begin{columns}[T] % [T] ensures correct vertical alignment
 		\begin{column}{0.49\linewidth} % Left column
 			\centering
-			\includegraphics[width=0.8\textwidth]{img/stat_indicator_of_DNI}\\
-			\includegraphics[width=0.8\textwidth]{img/stat_indicator_of_DNI_monthly}\\
-			\includegraphics[width=0.8\textwidth]{img/stat_indicator_of_DNI_yearly}
+			\includegraphics[width=\textwidth]{img/stat_indicator_of_DNI}
 		\end{column}
 		\begin{column}{0.49\linewidth} % Center column
 			\centering
-			\includegraphics[width=0.8\textwidth]{img/stat_indicator_of_GHI}\\
-			\includegraphics[width=0.8\textwidth]{img/stat_indicator_of_GHI_monthly}\\
-			\includegraphics[width=0.8\textwidth]{img/stat_indicator_of_GHI_yearly}
+			\includegraphics[width=\textwidth]{img/stat_indicator_of_GHI}
 		\end{column}
 	\end{columns}
 \end{frame}
@@ -527,41 +442,172 @@
 		\begin{column}{0.32\linewidth} % Left column
 			\centering
 			\begin{blockorange}{Discussions}
-				\textbullet \    Non prise en compte de \textbf{données moyennées par CM-SAF}
-				
-				\textbullet \   Résolution spatiale de \textbf{SARAH-3}
-				
-				\textbullet \     
+				\textbf{Erreurs :}
+				\begin{itemize}
+					\item Non prise en compte de \textbf{données moyennées par CM-SAF}
+					\item Résolution spatiale de \textbf{SARAH-3}(25 km²)
+					\item Estimation du \textbf{DNI} 
+					\item Estimation du \textbf{SZA} 
+				\end{itemize} 
 			\end{blockorange}
 		\end{column}
 		\begin{column}{0.32\linewidth} % Center column
 			\centering
-			\begin{blockbleu}{Conclusion}
-				\textbullet \  Le \textbf{GHI} est mieux estimé que le DNI.
-				
-				\textbullet \  \textbf{92\%} des données de DNI sont sous-estimées.
-				
-				\textbullet \  \textbf{40\%} des données de GHI sont surestimées .
-				
-				\textbullet \  Il en ressort que \textbf{SARAH-3} est un outil intéressant pour l'estimation de la ressource solaire dans la zone SOOI. 
+			\begin{blockbleu}{Conclusion}				
+				\begin{itemize}
+					\item Le \textbf{GHI} est mieux estimé que le DNI.
+					\item \textbf{92\%} des données de DNI sont sous-estimées.
+					\item \textbf{40\%} des données de GHI sont surestimées .
+					\item Il en ressort que \textbf{SARAH-3} est un outil intéressant pour l'estimation de la ressource solaire dans la zone SOOI. 
+				\end{itemize}
 			\end{blockbleu}
 		\end{column}
 		\begin{column}{0.32\linewidth} % Center column
 			\centering
-			\begin{blockorange}{Perceptives}
-				\textbullet \  Appliquer les filtres et les classifications pour les 38 autres stations afin d'\textbf{améliorer les estimations} de SARAH-3.
-				
-				\textbullet \  Réussir une \textbf{descente d'échelle} pour la résolution du satellite SARAH-3
-				
-				\textbullet \     
+			\begin{blockorange}{Perspectives}
+				\begin{itemize}
+					\setlength{\itemsep}{1pt} % Modification de l'espacement entre les items
+					\item Appliquer les filtres et les classifications pour les 38 autres stations afin d'\textbf{améliorer les estimations} de SARAH-3.
+					\item Réussir une \textbf{descente d'échelle} pour la résolution du satellite SARAH-3
+					\item Considération du relief (Site Adaptation)
+				\end{itemize}
 			\end{blockorange}
 		\end{column}
 	\end{columns}
 	\begin{center}
 		\includegraphics[width=0.4\textheight]{img/logo_UFRST}
 		\quad\quad\quad
+		\includegraphics[width=0.4\textheight]{img/logo_osu_r}
+		\quad\quad\quad
 		\includegraphics[width=0.4\textheight]{img/energy_labb}
 	\end{center}
+\end{frame}
+
+
+% Commencez les annexes
+\appendix
+\section{Annexes}
+\subsection{Monthly}
+\begin{frame}
+	\frametitle{Résultats pour toutes les stations}
+	\begin{columns}[T] % [T] ensures correct vertical alignment
+		\begin{column}{0.49\linewidth} % Left column
+			\centering
+			\includegraphics[width=\textwidth]{img/stat_indicator_of_DNI_monthly}
+		\end{column}
+		\begin{column}{0.49\linewidth} % Center column
+			\centering
+			\includegraphics[width=\textwidth]{img/stat_indicator_of_GHI_monthly}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\subsection{Yearly}
+\begin{frame}
+	\frametitle{Résultats pour toutes les stations}
+	\begin{columns}[T] % [T] ensures correct vertical alignment
+		\begin{column}{0.49\linewidth} % Left column
+			\centering
+			\includegraphics[width=\textwidth]{img/stat_indicator_of_DNI_yearly}
+		\end{column}
+		\begin{column}{0.49\linewidth} % Center column
+			\centering
+			\includegraphics[width=\textwidth]{img/stat_indicator_of_GHI_yearly}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\subsection{Information sur les stations}
+\begin{frame}
+	\frametitle{Les mesures in situ IOS-net}
+	% Première moitié de la page en hauteur, et toute la largeur de la frame
+	\begin{minipage}[t][0.2\textheight][t]{\textwidth}
+		\begin{blockorange}{Appareils de mesures}
+			\small
+			\begin{itemize}
+				\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+				\item \textbf{SPN1 / CMP22} : Pour les données de GHI et DHI
+				\item \textbf{CHP1} : Pour les données de DNI (BSRN)
+			\end{itemize}
+		\end{blockorange}
+	\end{minipage}
+	
+	\vfill
+	
+	% Deuxième moitié de la page, divisée en deux colonnes
+	\begin{minipage}[c][0.8\textheight][c]{0.45\textwidth}
+		\begin{blockbleu}{\'Equipement des stations}
+			\small
+			\begin{itemize}
+				\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+				\item Pyranomètre SPN1
+				\item Transmetteur météorologique WXT530
+				\item Radiomètre UV
+				\item Centrale d’acquisition
+				\item \'Eolienne
+				\item Panneau photovoltaïque
+				\item Régulateur de charge
+				\item Batterie de plomb 20 AH
+			\end{itemize}
+		\end{blockbleu}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c][0.8\textheight][c]{0.45\textwidth}
+		\includegraphics[trim=3cm 0cm 3cm 1cm, clip, width=1\linewidth]{img/SWIO_station}
+	\end{minipage}
+	
+\end{frame}
+
+\subsection{Données de l'étude}
+\begin{frame}
+	\frametitle{Données utiles}
+	\begin{columns}[T] % [T] ensures correct vertical alignment
+		\begin{column}{0.48\linewidth} % Left column
+			\begin{itemize}
+				\item Irradiance Horizontale Globale (GHI) en $W/m^2$.
+				\item Irradiance Normale Directe (DNI) en $W/m^2$ .
+			\end{itemize}
+			\begin{blockorange}{Considération de l'étude}
+				\textbf{Données}: 
+				\begin{itemize}
+					\item 39 stations \textbf{IOS-net}
+					\item \textbf{SARAH-3} dans la zone SOOI
+				\end{itemize}
+				\textbf{Plage temporelle} : 01/12/2008-01/04/2024
+				\begin{itemize}
+					\item  01/12/2008-01/04/2024
+					\item 02H-14H (données du jour)
+				\end{itemize}
+			\end{blockorange}
+		\end{column}
+		\begin{column}{0.48\linewidth} % Right column
+			\centering
+			\includegraphics[width=0.7\linewidth]{img/panneau_solaire}\\
+			\textbf{Panneau solaire (GHI)}\\
+			\includegraphics[width=0.7\linewidth]{img/four_solaire}\\
+			\textbf{Système à concentration solaire (DNI)}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Comparaison des méthodes de moyennes}
+	\centering
+	\includegraphics[width=\linewidth]{img/comparison_mean_method}
+	\begin{minipage}[c][0.55\textheight][t]{\textwidth}
+		\begin{blockbleu}{Mean comparison}
+			\begin{itemize}
+				\setlength{\itemsep}{0.5pt} % Modification de l'espacement entre les items
+				\item pandas mean : \texttt{resample('D').mean()}
+				\item CM-SAF mean :
+				\begin{equation}
+					SIS_{DA} = SIS_{CLSDA} \frac{\sum\limits_{i=1}^{n}SIS_i}{\sum\limits_{i=1}^{n}SIS_{CLS_i}}
+					\label{SIS_average}
+				\end{equation}
+				Avec $SIS_{DA}$ la moyenne journalière du SIS,  $SIS_{CLSDA}$ la moyenne journalière du SIS en ciel clair, $SIS_i$ valeur instantanée du SIS par les images satellites et $SIS_{CLS_i}$ est le SIS calculé correspondant au ciel clair.
+			\end{itemize}
+		\end{blockbleu}
+	\end{minipage}
 \end{frame}
 	
 \end{document}
