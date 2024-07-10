@@ -226,6 +226,12 @@ calculer_temps_execution(save_all_raw_data_to_csv_file,list_of_dat_per_country,n
 #############################################################################################################
 ```
 + La fonction `liste_of_link` permet de récupérer tout les liens `.nc` (netCDF files) disponible sur le site IOS-net [1], cette fonction renvoie donc une liste de 6 sous-liste avec chaque sous correspondant aux liens des respectifs aux 6 zones d'étues : Afrique du Sud, Seychelles, Mauritius, Madagascar, La Réunion et Comores.
++ La fonction `save_all_raw_data_to_csv_file` permet convertir toutes les liens `.nc` en dataframe, ensuite les dataframes sont converties en fichiers `.csv` puis sauvegarder localement.
++ La conversion des fichiers `.nc` en dataframe se fait grâce la fonction `nc_to_dataframe_second`, dans cette fonction le Timestamp de la dataframe est créé et uniquement les données d'irradiance sont conservé avec le code suivant :
+```python
+resultat_1 = [var for var in liste_variable if 'DHI' in var or 'GHI' in var or 'DNI' in var]
+```
+
 
 
 ### Collect GHI and DHI
