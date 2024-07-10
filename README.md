@@ -1,6 +1,6 @@
 # Intership of Master Energy : Inter-comparison and validation against in-situ measurements of satellite estimates of incoming solar radiation for Indien Ocean
 
-This projet is my code development from my internship in M1 Energie in University of Reunion Island.
+Ce projet Github est le développement que j'ai fait lors de mon stage de M1 ENERGIE, qui a pour objectif de pouvoir comparer et mettre en relation les enregistrements de données climatiques par satellite sur l'irradiation de la surface solaire (SARAH-3) avec les données de messures solaires au sol dans le réseaux IOS-net basé dans le Sud-Ouest de l'Océan Indien.
 
 **DATA** : 
 + In-situ measurements : Stations of IOS-net in SWIO (South Weast of Indien Ocean)
@@ -12,8 +12,6 @@ This projet is my code development from my internship in M1 Energie in Universit
 + SARAH-3 : 30 min
 
 ## RAW DATA
-
-
 ### Importation raw data
 We can upload all in IOS-NET website [1] with this python code : 
 
@@ -200,6 +198,8 @@ def save_all_raw_data_to_csv_file(list_of_dat_per_country,name_country):
 
 calculer_temps_execution(save_all_raw_data_to_csv_file,list_of_dat_per_country,name_country)      
 ```
++ La fonction `liste_of_link` permet de récupérer tout les liens `.nc` (netCDF files) disponible sur le site IOS-net [1], cette fonction renvoie donc une liste de 6 sous-liste avec chaque sous correspondant aux liens des respectifs aux 6 zones d'étues : Afrique du Sud, Seychelles, Mauritius, Madagascar, La Réunion et Comores.
+
 
 ### Collect GHI and DHI
 
