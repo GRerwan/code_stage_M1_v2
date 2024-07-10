@@ -199,7 +199,7 @@ def save_all_raw_data_to_csv_file(list_of_dat_per_country,name_country):
 
 
 calculer_temps_execution(save_all_raw_data_to_csv_file,list_of_dat_per_country,name_country)      
-
+```
 
 ### Collect GHI and DHI
 
