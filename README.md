@@ -38,8 +38,68 @@ import requests
 from bs4 import BeautifulSoup
 import time
 
-url = "https://galilee.univ-reunion.fr/thredds/catalog/dataStations/catalog.html"
+#############################################################################################################
+# Fonction de tri personnalisée ( permet de mettre les GHI en premier dans la liste )
+def custom_sort(item):
+    if 'GHI' in item:
+        return (0, item)  # Mettre les chaînes contenant 'GHI' en premier
+    else:
+        return (1, item)  # Mettre les autres chaînes après
 
+
+#############################################################################################################
+# Conversion dataframe
+def nc_to_dataframe_second(ncfile):
+    liste_variable = []
+    for varname, var in ncfile.variables.items():
+        if hasattr(var, "standard_name"):
+            liste_variable.append(varname)
+
+    # Filtrage des chaînes de caractères contenant 'DHI' ou 'GHI'
+    resultat_1 = [var for var in liste_variable if 'DHI' in var or 'GHI' in var or 'DNI' in var]
+    resultat = [var for var in resultat_1 if 'Avg' in var]
+    
+    # Réorganisation de la liste
+    resultat_triee = sorted(resultat, key=custom_sort)
+
+    # Extract the time and variables arrays from the netCDF file
+    time_unix = ncfile.variables['time'][:]
+    variable_arrays = [ncfile.variables[var][:] for var in resultat_triee]
+
+    # Convert the time to pandas datetime format with UTC timezone and then to local time
+    time_utc = pd.to_datetime(time_unix, unit='s', origin='unix', utc=False)
+
+    # Create a dataframe with the variables arrays
+    df = pd.DataFrame(dict(zip(resultat_triee, variable_arrays)), index=time_utc)
+    
+    ncfile.close() # Close the NetCDF file properly
+    
+    return df
+#############################################################################################################
+def nc_to_dataframe(nc_file_paths):
+    # Initialiser une liste pour stocker les DataFrames pour chaque fichier .nc
+    dfs = []
+    # Parcourir chaque lien .nc dans la liste
+    for nc_file_path in reversed(nc_file_paths):
+        ncfile = nc.Dataset(nc_file_path)
+        df = nc_to_dataframe_second(ncfile)
+
+        # Convertir les données en un DataFrame et l'ajouter à la liste
+        dfs.append(df)
+
+    # Concaténer tous les DataFrames en un seul DataFrame
+    final_df = pd.concat(dfs)
+
+    return final_df
+#############################################################################################################
+def affiche_data_reunion(liste):
+    name_station=liste[0]
+    liste_data=liste[1:]
+    df=nc_to_dataframe(liste_data)
+    return name_station , df
+#############################################################################################################
+url = "https://galilee.univ-reunion.fr/thredds/catalog/dataStations/catalog.html"
+#############################################################################################################
 def liste_of_link(url):
     """
     Import all netCDF files by IOS-NET website
@@ -129,43 +189,20 @@ def liste_of_link(url):
     execution_time = end_time - start_time
     print("Temps d'exécution:", execution_time, "secondes")
     return L
-liste_of_data=liste_of_link(url)
-
-
-# data of South Africa
-south_africa = liste_of_data[0]
-#print(f'Data of South Africa : {south_africa}')
-
-# data of Seychelles
-seychelle = liste_of_data[1]
-#print("\n")
-#print(f'Data of Seychelles : {seychelle}')
-
-
-# data of Mauritius
-mauritius = liste_of_data[2]
-#print("\n")
-#print(f'Data of Mauritius : {mauritius}')
-
-
-# data of Madagascar
-mada = liste_of_data[3]
-#print("\n")
-#print(f'Data of Madagascar : {mada}')
-
-# data of La Réunion
-reunion = liste_of_data[4]
-#print("\n")
-#print(f'Data of Reunion : {reunion}')
-
-# data of Comores
-comores = liste_of_data[5]
-#print("\n")
-#print(f'Data of Comores : {comores}')
-
-
-list_of_dat_per_country = [south_africa,seychelle,mauritius,mada,reunion,comores]
+#############################################################################################################
+list_of_dat_per_country =liste_of_link(url)
+#############################################################################################################
 name_country = ['south_africa','seychelle','mauritius','mada','reunion','comores']
+#############################################################################################################
+def save_all_raw_data_to_csv_file(list_of_dat_per_country,name_country):
+    L = len(name_country)
+    for i in range(L):
+        k = len(list_of_dat_per_country[i])
+        for j in range(k):
+            name_station , df_station = affiche_data_reunion(list_of_dat_per_country[i][j])
+            print(name_station)
+            df_station.to_csv(f'data_raw_UTC/{name_country[i]}/{name_station}_irrad.csv', sep=';', index=True) 
+    return
 #############################################################################################################
 def calculer_temps_execution(function, *args, **kwargs):
     # Record the start time
@@ -184,19 +221,9 @@ def calculer_temps_execution(function, *args, **kwargs):
     print(f"Execution time of {function.__name__}: {execution_time} seconds")
     
     return result
-
-def save_all_raw_data_to_csv_file(list_of_dat_per_country,name_country):
-    L = len(name_country)
-    for i in range(L):
-        k = len(list_of_dat_per_country[i])
-        for j in range(k):
-            name_station , df_station = affiche_data_reunion(list_of_dat_per_country[i][j])
-            print(name_station)
-            df_station.to_csv(f'data_raw_UTC/{name_country[i]}/{name_station}_irrad.csv', sep=';', index=True) 
-    return
-
-
-calculer_temps_execution(save_all_raw_data_to_csv_file,list_of_dat_per_country,name_country)      
+#############################################################################################################
+calculer_temps_execution(save_all_raw_data_to_csv_file,list_of_dat_per_country,name_country)
+#############################################################################################################
 ```
 + La fonction `liste_of_link` permet de récupérer tout les liens `.nc` (netCDF files) disponible sur le site IOS-net [1], cette fonction renvoie donc une liste de 6 sous-liste avec chaque sous correspondant aux liens des respectifs aux 6 zones d'étues : Afrique du Sud, Seychelles, Mauritius, Madagascar, La Réunion et Comores.
 
