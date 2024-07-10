@@ -231,15 +231,17 @@ calculer_temps_execution(save_all_raw_data_to_csv_file,list_of_dat_per_country,n
 ```python
 resultat_1 = [var for var in liste_variable if 'DHI' in var or 'GHI' in var or 'DNI' in var]
 ```
-Ainsi, on obtient un tableau comme ci-dessous : 
+Ainsi, on obtient par exemple pour le site du Moufia ("urmoufia") un tableau comme ci-dessous : 
 
 |                     |   GHI_pa01_Avg |   DHI_pa01_Avg |   GHI_qb01_Avg |   GHI_pa03_Avg |   DHI_pa03_Avg |   DHI_pw01_Avg |   GHI_pn03_Avg |   GHI_qb03_Avg |   DHI_pn03_Avg |   DHI_pw03_Avg |   DNI_px03_Avg |
 |:--------------------|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|
-| 2008-12-01 00:00:00 |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |
-| 2008-12-01 00:01:00 |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |
-| 2008-12-01 00:02:00 |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |
-| 2008-12-01 00:03:00 |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |
-| 2008-12-01 00:04:00 |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |
+| 2020-01-24 08:00:00 |            nan |            nan |            nan |            nan |            nan |            nan |          138   |          43.01 |          144.6 |          144.4 |          191.8 |
+| 2020-01-24 08:01:00 |            nan |            nan |            nan |            nan |            nan |            nan |          140.6 |          43.77 |          147.5 |          145.6 |          192   |
+| 2020-01-24 08:02:00 |            nan |            nan |            nan |            nan |            nan |            nan |          143.9 |          44.73 |          149.3 |          148.4 |          192   |
+| 2020-01-24 08:03:00 |            nan |            nan |            nan |            nan |            nan |            nan |          150.4 |          46.1  |          156.8 |          152.4 |          191.7 |
+| 2020-01-24 08:04:00 |            nan |            nan |            nan |            nan |            nan |            nan |          157.7 |          47.71 |          165.4 |          156.8 |          192.2 |
+
+On voit ainsi que les données d'irradiance ne sont pas encore utilisable pour l'étude car en effet pour une même période deux valeurs de GHI ou de DHI peuvent être observé. Cela s'explique par le fait que "deux capteurs mesures en même temps le GHI ". Ainsi, afin de pouvoir utilisé les données de GHI, DHI et DNI il faut avoir une seule colonne de chaque irradiance.
 
 ### Estimate DNI with GHI and DHI
 
