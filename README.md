@@ -231,12 +231,18 @@ calculer_temps_execution(save_all_raw_data_to_csv_file,list_of_dat_per_country,n
 ```python
 resultat_1 = [var for var in liste_variable if 'DHI' in var or 'GHI' in var or 'DNI' in var]
 ```
+Ainsi, on obtient un tableau comme ci-dessous : 
 
-
-
-### Collect GHI and DHI
+|                     |   GHI_pa01_Avg |   DHI_pa01_Avg |   GHI_qb01_Avg |   GHI_pa03_Avg |   DHI_pa03_Avg |   DHI_pw01_Avg |   GHI_pn03_Avg |   GHI_qb03_Avg |   DHI_pn03_Avg |   DHI_pw03_Avg |   DNI_px03_Avg |
+|:--------------------|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|---------------:|
+| 2008-12-01 00:00:00 |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |
+| 2008-12-01 00:01:00 |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |
+| 2008-12-01 00:02:00 |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |
+| 2008-12-01 00:03:00 |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |
+| 2008-12-01 00:04:00 |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |            nan |
 
 ### Estimate DNI with GHI and DHI
+
 
 
 
