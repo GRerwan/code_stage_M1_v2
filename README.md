@@ -311,8 +311,72 @@ Pour le cas de la stations du moufia, il est possible d'avoir les données de DN
 + $-4 < DHI < S_a \times 0.95 \times \mu_0^{1.2} + 50$
 + $-4 < DNI < S_a$
 
+```python
+def estimation_dni_physical_limits(df, df_geo, name_station, time_zone):
+    """
+    Estimation of DNI values with GHI and DHI
 
+    Args:
+        df (DataFrame): DataFrame containing irradiance data (GHI and DHI).
+        df_geo (DataFrame): DataFrame containing geographic data (Longitude, Latitude and Altitude).
+        name_station (str): Name of the station.
+        time_zone (str): time zone of station.
+        
+    Returns:
+        df_1 (DataFrame): DataFrame containing irradiance data (dhi ,dni, ghi, mu0, extra_radiation and zenith).
 
+    Example:
+        estimation_dni_physical_limits(df_test, data_geo, 'plaineparcnational', 'Indian/Reunion')
+    """
+    df_1 = df.copy() # copy to use new dataframe
+    #df_1.index = pd.to_datetime(df_1.index) # conversion of index
+    good_data = df_geo.loc[df_geo.index[df_geo.index == f'{name_station}']] # select of geographic data of station
+    a = good_data.iloc[0]
+    # Definition of Location object. Coordinates and elevation of La Plaine des Palmistes (Reunion)
+    site = Location(a.Latitude, a.Longitude, time_zone, a.Altitude, f'{name_station} (SWOI)') # latitude, longitude, time_zone, altitude, name
+    solpos = site.get_solarposition(df_1.index)
+    df_1['SZA'] = solpos['zenith']
+    df_1['extra_radiation'] = pvlib.irradiance.get_extra_radiation(df_1.index)
+    df_1['mu0'] = np.cos(np.deg2rad(df_1['SZA'])).clip(lower=0.1)
+    df_1['dni'] = (df_1['ghi'] - df_1['dhi'] ) / df_1['mu0']
+    df_1['physical_limit_ghi'] = 1.5 * df_1['extra_radiation'] * df_1['mu0']**1.2 + 100
+    df_1['physical_limit_dhi'] = 0.95 * df_1['extra_radiation'] * df_1['mu0']**1.2 + 50
+    df_1['physical_limit_dni'] = df_1['extra_radiation']
+    return df_1
+```
+
+Ensuite après avoir accès aux données complètes de l'irradiance, il est nécessaire d'appliquer le contrôle de qualité sur les données c'est-à-dire supprimer les données qui ne respect pas les limites physiques avec la fonction `quality_of_bsrn` suivant : 
+```python
+def quality_of_bsrn(df):
+    """
+    Delete data that does not meet BSRN criteria
+
+    Args:
+        df (DataFrame): DataFrame containing irradiance data.
+        
+    Returns:
+        df_hourly_mean (DataFrame): DataFrame containing filter irradiance data with hourly mean.
+    """
+    # Create a copy of the DataFrame to avoid modifying the original data
+    df_1 = df.copy()
+    df_1.index = pd.to_datetime(df_1.index) # conversion of index
+    # Replace outliers with np.nan for each measurement
+    # For 'ghi'
+    df_1.loc[(df_1['ghi'] < -4) | (df_1['ghi'] > df_1['physical_limit_ghi']), 'ghi'] = np.nan
+    # For 'dhi'
+    df_1.loc[(df_1['dhi'] < -4) | (df_1['dhi'] > df_1['physical_limit_dhi']), 'dhi'] = np.nan
+    # For 'dni'
+    df_1.loc[(df_1['dni'] < -4) | (df_1['dni'] > df_1['extra_radiation']), 'dni'] = np.nan
+    
+    if 'dni_ground' in df_1.columns :
+        df_1.loc[(df_1['dni_ground'] < -4) | (df_1['dni_ground'] > df_1['extra_radiation']), 'dni_ground'] = np.nan
+
+    # Group data by hour and calculate the mean
+    df_minute_mean = df_1.resample('T').mean()
+
+    # Returns the DataFrame with outliers replaced by np.nan
+    return df_minute_mean
+```
 
 
 
