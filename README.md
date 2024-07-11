@@ -378,8 +378,16 @@ def quality_of_bsrn(df):
     return df_minute_mean
 ```
 
+### Save raw data
 
+### CLassification
 
+Il savoir dans un premier temps que la classification qui sera abordé a été développé par **Jose A Ruiz-Arias** et que la classification dépend principalement du modèle de ciel utilisé, ainsi, un modèle de ciel précise permet d'ameliorer la précision pour la classification. Pour ma part dans ce stage pas manque de temps j'ai choisie un modèle de ciel clair relativement simple avec `pvlib`.
+
+Possible amélioration :
++ Condisération des données de la températures dans le code : `sp = loc.get_solarposition(run_bsrn_data.index, temperature=25)`
++ Condisération des données sur la turbidité dans le code : `cs = loc.get_clearsky(run_bsrn_data.index, model='ineichen', linke_turbidity=2)`
++ Le choix d'un meilleur modèle de ciel claire.
 
 
 
