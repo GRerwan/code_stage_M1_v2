@@ -241,7 +241,68 @@ Ainsi, on obtient par exemple pour le site du Moufia ("urmoufia") un tableau com
 | 2020-01-24 08:03:00 |            nan |            nan |            nan |            nan |            nan |            nan |          150.4 |          46.1  |          156.8 |          152.4 |          191.7 |
 | 2020-01-24 08:04:00 |            nan |            nan |            nan |            nan |            nan |            nan |          157.7 |          47.71 |          165.4 |          156.8 |          192.2 |
 
-On voit ainsi que les données d'irradiance ne sont pas encore utilisable pour l'étude car en effet pour une même période deux valeurs de GHI ou de DHI peuvent être observé. Cela s'explique par le fait que "deux capteurs mesures en même temps le GHI ". Ainsi, afin de pouvoir utilisé les données de GHI, DHI et DNI il faut avoir une seule colonne de chaque irradiance.
+On voit ainsi que les données d'irradiance ne sont pas encore utilisable pour l'étude car en effet pour une même période deux valeurs de GHI ou de DHI peuvent être observé. Cela s'explique par le fait que "deux capteurs mesures en même temps le GHI ". Ainsi, afin de pouvoir utilisé les données de GHI, DHI et DNI il faut avoir une seule colonne de chaque irradiance. La fonction `one_column_ghi_dhi`permet de mettre les données dans une seule colonne de GHI, de DNI et de DHI : 
+
+|                     |   ghi |   dhi |   dni_ground |
+|:--------------------|------:|------:|-------------:|
+| 2020-01-24 08:00:00 | 138   | 144.6 |        191.8 |
+| 2020-01-24 08:01:00 | 140.6 | 147.5 |        192   |
+| 2020-01-24 08:02:00 | 143.9 | 149.3 |        192   |
+| 2020-01-24 08:03:00 | 150.4 | 156.8 |        191.7 |
+| 2020-01-24 08:04:00 | 157.7 | 165.4 |        192.2 |
+
+```python
+def one_column_ghi_dhi(df_station):
+    """
+    Show only one column of ghi and one column of dhi.
+
+    Args:
+        df_station (DataFrame): DataFrame containing irradiance data.
+        
+    Returns:
+        df (DataFrame): DataFrame containing irradiance data with only 'ghi', 'dhi' and 'dni_ground' columns.
+    """
+    df = df_station.copy()
+
+    # Convert index to datetime
+    df.index = pd.to_datetime(df.index)
+    
+    # Filtrer les colonnes contenant 'GHI'
+    ghi_columns = df.filter(like='GHI').columns
+    dhi_columns = df.filter(like='DHI').columns
+    dni_columns = df.filter(like='DNI').columns
+    
+    # Initialiser la colonne 'ghi' avec les valeurs de la première colonne trouvée
+    df['ghi'] = df[ghi_columns[0]]
+    df['dhi'] = df[dhi_columns[0]]
+    
+    if len(dni_columns)!=0:
+        df['dni_ground'] = df[dni_columns[0]]
+    
+    if len(ghi_columns) > 1 : 
+        for col in ghi_columns[1:]:
+            df['ghi'] = df['ghi'].combine_first(df[col])
+    else : 
+        df = df
+    
+    if len(dhi_columns) > 1 : 
+        for col in dhi_columns[1:]:
+            df['dhi'] = df['dhi'].combine_first(df[col])
+    else : 
+        df = df
+    
+    if len(dni_columns) > 1 : 
+        for col in dni_columns[1:]:
+            df['dni_ground'] = df['dni_ground'].combine_first(df[col])
+    else : 
+        df = df
+    
+    # Remove the old columns
+    df = df.drop(columns=df.filter(like='GHI').columns)
+    df = df.drop(columns=df.filter(like='DHI').columns)
+    df = df.drop(columns=df.filter(like='DNI').columns)
+    return df
+```
 
 ### Estimate DNI with GHI and DHI
 
