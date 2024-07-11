@@ -306,6 +306,30 @@ def one_column_ghi_dhi(df_station):
 
 ### Estimate DNI with GHI and DHI
 
+Pour le cas de la stations du moufia, il est possible d'avoir les données de DNI car cette station possède en un CMP22, cependant les autres stations du réseaux IOS-net possèdent seulement une SPN1 pour la messures de radiation solaire. Ainsi, il est important de pouvoir estimer le DNI pour les autres stations avec la fonction `estimation_dni_physical_limits` suivant qui permet d'une part d'estimer le DNI mais également permet d'avoir les limites physiques pour les irradiances : 
+
+\begin{equation} \label{QC_GHI}
+	\begin{gathered}
+		\text{\textbf{QC1- GHI - }($W.m^{-2}$)} \\
+		\text{Physical limits : } S_a \times 1.5 \times \mu_0^{1.2} + 100
+	\end{gathered}
+\end{equation}
+
+
+\begin{equation} \label{QC_DHI}
+	\begin{gathered}
+		\text{\textbf{QC2- DHI - }($W.m^{-2}$)} \\
+		\text{Physical limits : } S_a \times 0.95 \times \mu_0^{1.2} + 50
+	\end{gathered}
+\end{equation}
+
+\begin{equation} \label{QC_DNI}
+	\begin{gathered}
+		\text{\textbf{QC3- DNI - }($W.m^{-2}$)} \\
+		\text{Physical limits : } S_a 
+	\end{gathered}
+\end{equation}
+
 
 
 
