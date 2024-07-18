@@ -387,6 +387,15 @@ def quality_of_bsrn(df):
 
 Il savoir dans un premier temps que la classification qui sera abordé a été développé par **Jose A Ruiz-Arias** et que la classification dépend principalement du modèle de ciel utilisé, ainsi, un modèle de ciel précise permet d'ameliorer la précision pour la classification. Pour ma part dans ce stage pas manque de temps j'ai choisie un modèle de ciel clair relativement simple avec `pvlib`.
 
+Les classifications qui sont disponible par le code de [Jose A Ruiz-Arias](https://github.com/jararias/caelus) : 
+
+- OVERCAST
+- THICK CLOUDS
+- SCATTER CLOUDS
+- THIN CLOUDS
+- CLOUDLESS
+- CLOUD ENHANCEMENT
+
 + Sud Ouest de l'Océan Indien
 
 ![Carte Sud Ouest de l'Océan Indian](https://github.com/user-attachments/assets/4ea890ad-d46d-4268-a860-ad59eeb3f520)
@@ -415,6 +424,10 @@ Il savoir dans un premier temps que la classification qui sera abordé a été d
 
 ![image](https://github.com/user-attachments/assets/1738a24d-d771-418c-b865-5e1db431c392)
 ![image](https://github.com/user-attachments/assets/ccbd538f-89bb-4053-96ff-314c66d889a6)
+
+
+**La taille des diagramme circulaire sont proportionnelles au valeurs moyenne du GHI au niveau de chaque stations.**
+
 
 
 
