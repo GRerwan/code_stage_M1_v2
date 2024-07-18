@@ -379,7 +379,8 @@ def quality_of_bsrn(df):
 ```
 
 ### Save raw data
-[Classification](carte_all_station.html)
+![Carte des Stations](images/carte_all_station.png)
+POur voir la carte sous format html cliquer [ici](carte_all_station.html)
 
 ### CLassification
 
