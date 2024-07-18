@@ -439,7 +439,38 @@ Possible amélioration :
 
 
 
-## Importation of satellite estimates data
+## Importation of satellite estimates data (SARAH-3)
+Pour télécharger les données de SARAH-3, il faut tout d'abord se créer un compte sur le site de CMSAF : 
++ Step 1 : [REGISTRATION](https://wui.cmsaf.eu/safira/action/viewLogin;jsessionid=EC9BCA5ED19EE259B6281E188D13FA1D.ku_2)
++ Step 2 : [Choose data](https://wui.cmsaf.eu/safira/action/viewProduktSearch)
++ Sélection les informations utiles dans la partie *ADVANCED SEARCH* :
+  - `Product group` : Climate Data Records
+  - `Product family` : SARAH ed. 3.0
+  - `Product name ` : SIS - Surface incoming shortwave radiation ou DNI - Direct Normalised Irradiance (en fonction du besoin)
+  - `Temporal resolution` : Instantaneous ou Daily ou Monthly (en fonction du besoin)
+  - Cliquer sur `Show`
++ Cliquer sur le liens des données dans la colonne : `Name / Details`
++ Cliquer sur `Change projection / spatial resolution / domain` dans la partie *PRODUCT ADAPTATIONS*
++ Choisir les coordonnées géographique de la zone avec les angles de latitude et longitude pour  sélectionner uniquement les données utiles pour l'étude, cliquer sur `PREVIEWS` pour vérifier que la zone est correcte.
++ Cliquer sur `Proceed to time range selection`
++ Sur la page de *Specification of time range* choisir le début et la fin du jeux de données:
+  - `Begin`: 2008-12-01
+  - `End`: 2024-04-01
++ Cliquer sur  `Add to order cart`
++ Cliquer sur  `Place an order`
++ Suivre les instructions reçu par mail (2 jours pour les données de 2008-12-01 à 2024-04-01)
+
+
+
+## Adapation of SARAH-3 data
+
+Les données de SARAH-3 sont relativement éloigné des données des stations du réseau  IOS-net, ainsi une adaptation des données satellite est nécessaire afin que les données satellite soient plus proche des mesures au sol. Cette adapation doit être effectué sur le GHI et le DNI indépendamment.
+
+![image](https://github.com/user-attachments/assets/2ea7e3f3-df0e-403d-96fe-8141f7a8075a)
+
+
+## Classification SARAH-3 data
+
 
 
 # Source
