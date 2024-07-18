@@ -379,17 +379,50 @@ def quality_of_bsrn(df):
 ```
 
 ### Save raw data
-![Carte des Stations](images/carte_all_station.png)
-POur voir la carte sous format html cliquer [ici](carte_all_station.html)
+
+
+
 
 ### CLassification
 
 Il savoir dans un premier temps que la classification qui sera abordé a été développé par **Jose A Ruiz-Arias** et que la classification dépend principalement du modèle de ciel utilisé, ainsi, un modèle de ciel précise permet d'ameliorer la précision pour la classification. Pour ma part dans ce stage pas manque de temps j'ai choisie un modèle de ciel clair relativement simple avec `pvlib`.
 
++ Sud Ouest de l'Océan Indien
+
+![Carte Sud Ouest de l'Océan Indian](https://github.com/user-attachments/assets/4ea890ad-d46d-4268-a860-ad59eeb3f520)
+
++ Sud de l'Afrique
+
+![Durban](https://github.com/user-attachments/assets/9da9f121-1ce0-4015-99d3-458843c135a6)
+
++ Comores
+
+![image](https://github.com/user-attachments/assets/f9af4b4b-7c4c-476c-9dd5-aadbe1dc842c)
+
++ Madagascar
+
+![image](https://github.com/user-attachments/assets/6f5d309c-a810-4b72-9bf8-741e8ce68941)
+
++ Seychelles
+
+![image](https://github.com/user-attachments/assets/baf6be9f-310f-4159-9335-a16f7c609321)
+
++ La Reunion
+
+![image](https://github.com/user-attachments/assets/f4dd4835-9cd0-494a-8bc9-bda048f363ba)
+
++ Maurice
+
+![image](https://github.com/user-attachments/assets/1738a24d-d771-418c-b865-5e1db431c392)
+![image](https://github.com/user-attachments/assets/ccbd538f-89bb-4053-96ff-314c66d889a6)
+
+
+
+
 Possible amélioration :
 + Condisération des données de la températures dans le code : `sp = loc.get_solarposition(run_bsrn_data.index, temperature=25)`
 + Condisération des données sur la turbidité dans le code : `cs = loc.get_clearsky(run_bsrn_data.index, model='ineichen', linke_turbidity=2)`
-+ Le choix d'un meilleur modèle de ciel claire.
++ Le choix d'un meilleur modèle de ciel clair.
 
 
 
