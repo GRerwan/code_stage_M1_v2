@@ -561,3 +561,143 @@ def regroup_sarah_data_daily_mean_par_station(liste_of_file_path,data_geo,name_s
     df.to_csv(f'data_sarah3/DNI/daily/dataframe/{name_station}.csv', sep=';', index=True)
     return df
 
+
+def regroup_sarah_data_daily_mean_GHI(liste_of_file_path,data_geo):
+    """
+    Save the pixel value on dataframe with SARAH-3 data at netCDF files
+
+    Args:
+        liste_of_file_path (lst) : liste of path data
+        data_geo (dataFrame) : dataframe which contains all geographical data of stations
+
+    Returns:
+        data_geo (dataFrame) : dataframe which contains all geographical data of stations
+
+    Example :
+        liste_of_file_path = ["data_sarah3/2020/DNImm202001010000004UD1000101UD.nc",....,"data_sarah3/2020/DNImm202012010000004UD1000101UD.nc",]
+        data_geo = pd.read_csv('data_geo_adaptation.csv', sep=';', index_col=0)
+    """
+
+    # make a copy to be able to manipulate the dataframe without modifying the original
+    data_modif = data_geo.copy()
+    index_data_geo = data_geo.index.tolist()
+    df = pd.DataFrame(columns=index_data_geo)
+    k=0
+    for j in range(len(liste_of_file_path)):
+        k=k+1
+        print(f'\r{k}', end='', flush=True)
+        
+        url = liste_of_file_path[j]
+        ncfile = nc.Dataset(url)
+        STANDARD_NAME = "surface_downwelling_shortwave_flux_in_air" #GHI
+        # Searching for variable by standard name
+        varname = next((name for name, var in ncfile.variables.items() if hasattr(var, 'standard_name') and var.standard_name == STANDARD_NAME), None)
+        if not varname:
+            print(f"Error: Unable to find variable with standard name '{STANDARD_NAME}' in file: {url}")
+            ncfile.close()
+            sys.exit(1)
+        # Extracting parameters
+        latitude = ncfile.variables['lat'][:]
+        longitude = ncfile.variables['lon'][:]
+        
+        # Extracting time
+        time_unix = ncfile.variables['time'][:]
+        var_array = np.array(ncfile.variables[varname][:])
+        
+        # Converting time to human-readable format
+        time_array = np.array([datetime.fromtimestamp(t) for t in time_unix])
+        dni_value_sarah = var_array[0]
+        dni_liste = []
+        liste_latitude = list(latitude.data)
+        liste_longitude = list(longitude.data)
+        for i in range(data_modif.shape[0]):
+            float64_number_1 = data_modif['Latitude_modif'][i]
+            float32_number_1 = float64_number_1.astype(np.float32)
+            float64_number_2 = data_modif['Longitude_modif'][i]
+            float32_number_2 = float64_number_2.astype(np.float32)
+            indice_lat = liste_latitude.index(float32_number_1)
+            indice_long = liste_longitude.index(float32_number_2)
+            val = dni_value_sarah[indice_lat][indice_long]
+            dni_liste.append(val)
+        dni_value = dni_liste
+        index = pd.to_datetime(ncfile.time_coverage_start)
+        df.loc[index] = dni_value
+    print()
+    # Renommer toutes les colonnes
+    new_column_names = [col + '_GHI_SARAH_3' for col in df.columns]
+    # Renommer les colonnes
+    df.rename(columns=dict(zip(df.columns, new_column_names)), inplace=True)
+    df.name = 'GHI_SARAH_3'
+    df.replace(-999, np.nan, inplace=True)
+    df.to_csv('comparison/daily_mean/all_SARAH_data_GHI.csv', sep=';', index=True)
+    return df
+
+def regroup_sarah_data_instant_GHI(liste_of_file_path,data_geo):
+    """
+    Save the pixel value on dataframe with SARAH-3 data at netCDF files
+
+    Args:
+        liste_of_file_path (lst) : liste of path data
+        data_geo (dataFrame) : dataframe which contains all geographical data of stations
+
+    Returns:
+        data_geo (dataFrame) : dataframe which contains all geographical data of stations
+
+    Example :
+        liste_of_file_path = ["data_sarah3/2020/DNImm202001010000004UD1000101UD.nc",....,"data_sarah3/2020/DNImm202012010000004UD1000101UD.nc",]
+        data_geo = pd.read_csv('data_geo_adaptation.csv', sep=';', index_col=0)
+    """
+
+    # make a copy to be able to manipulate the dataframe without modifying the original
+    data_modif = data_geo.copy()
+    index_data_geo = data_geo.index.tolist()
+    df = pd.DataFrame(columns=index_data_geo)
+    k=0
+    for j in range(len(liste_of_file_path)):
+        k=k+1
+        print(f'\r{k}', end='', flush=True)
+        
+        url = liste_of_file_path[j]
+        ncfile = nc.Dataset(url)
+        STANDARD_NAME = "surface_downwelling_shortwave_flux_in_air" #GHI
+        # Searching for variable by standard name
+        varname = next((name for name, var in ncfile.variables.items() if hasattr(var, 'standard_name') and var.standard_name == STANDARD_NAME), None)
+        if not varname:
+            print(f"Error: Unable to find variable with standard name '{STANDARD_NAME}' in file: {url}")
+            ncfile.close()
+            sys.exit(1)
+        # Extracting parameters
+        latitude = ncfile.variables['lat'][:]
+        longitude = ncfile.variables['lon'][:]
+        
+        # Extracting time
+        time_unix = ncfile.variables['time'][:]
+        var_array = np.array(ncfile.variables[varname][:])
+        
+        # Converting time to human-readable format
+        time_array = np.array([datetime.fromtimestamp(t) for t in time_unix])
+        dni_value_sarah = var_array[0]
+        dni_liste = []
+        liste_latitude = list(latitude.data)
+        liste_longitude = list(longitude.data)
+        for i in range(data_modif.shape[0]):
+            float64_number_1 = data_modif['Latitude_modif'][i]
+            float32_number_1 = float64_number_1.astype(np.float32)
+            float64_number_2 = data_modif['Longitude_modif'][i]
+            float32_number_2 = float64_number_2.astype(np.float32)
+            indice_lat = liste_latitude.index(float32_number_1)
+            indice_long = liste_longitude.index(float32_number_2)
+            val = dni_value_sarah[indice_lat][indice_long]
+            dni_liste.append(val)
+        dni_value = dni_liste
+        index = pd.to_datetime(ncfile.time_coverage_start)
+        df.loc[index] = dni_value
+    print()
+    # Renommer toutes les colonnes
+    new_column_names = [col + '_GHI_SARAH_3' for col in df.columns]
+    # Renommer les colonnes
+    df.rename(columns=dict(zip(df.columns, new_column_names)), inplace=True)
+    df.name = 'GHI_SARAH_3'
+    df.replace(-999, np.nan, inplace=True)
+    df.to_csv('data_sarah3/GHI/instantaneous/dataframe/all_SARAH_instant_GHI.csv', sep=';', index=True)
+    return df
